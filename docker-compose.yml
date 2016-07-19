@@ -5,8 +5,6 @@ nginx-push-stream:
     - 80
   volumes:
     - ./push-stream.conf:/etc/nginx/nginx.conf
-  labels:
-    io.rancher.sidekicks: php-fpm
 
 publisher:
   image: gallna/php5:ffmpeg
@@ -14,6 +12,8 @@ publisher:
     - 9000
   links:
     - nginx-push-stream
+    - ffmpeg-stream
+    - vlc-stream
   volumes:
     - ./publisher:/var/www/public
   environment:
@@ -49,3 +49,18 @@ nginx-subscriber:
     - subscriber:php-fpm
   volumes_from:
     - subscriber
+
+
+ffmpeg-stream:
+  image: jrottenberg/ffmpeg
+  container_name: ffmpeg-stream
+  expose:
+    - 80
+  command: -i http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4 -listen 1 -f mpeg http://0.0.0.0:80/ElephantsDream.mp4
+
+vlc-stream:
+  image: gallna/stream-proxy:vlc
+  container_name: vlc-stream
+  expose:
+    - 8080
+  command: http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4
