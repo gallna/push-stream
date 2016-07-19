@@ -1,0 +1,51 @@
+nginx-push-stream:
+  image: z7zmey/nginx-push-stream
+  container_name: nginx-push-stream
+  expose:
+    - 80
+  volumes:
+    - ./push-stream.conf:/etc/nginx/nginx.conf
+  labels:
+    io.rancher.sidekicks: php-fpm
+
+publisher:
+  image: gallna/php5:ffmpeg
+  expose:
+    - 9000
+  links:
+    - nginx-push-stream
+  volumes:
+    - ./publisher:/var/www/public
+  environment:
+    DEBUG: 'true'
+
+subscriber:
+  image: gallna/php5:ffmpeg
+  expose:
+    - 9000
+  links:
+    - nginx-push-stream
+  volumes:
+    - ./subscriber:/var/www/public
+  environment:
+    DEBUG: 'true'
+
+nginx-publisher:
+  image: gallna/docker-nginx:php-fpm
+  container_name: video-publisher
+  expose:
+    - 80
+  links:
+    - publisher:php-fpm
+  volumes_from:
+    - publisher
+
+nginx-subscriber:
+  image: gallna/docker-nginx:php-fpm
+  container_name: video-subscriber
+  expose:
+    - 80
+  links:
+    - subscriber:php-fpm
+  volumes_from:
+    - subscriber
