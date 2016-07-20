@@ -18,7 +18,7 @@ $app->get('/mpeg', function ($request, $response, $args) {
 
 $app->get('/mp4', function ($request, $response, $args) {
     $command = sprintf(
-        'ffmpeg -f mpegts -i %s -c copy -bsf:v h264_mp4toannexb -movflags empty_moov+frag_keyframe -f mp4 pipe:',
+        'ffmpeg -f mpegts -i %s -c copy -bsf:v h264_mp4toannexb -movflags empty_moov+frag_keyframe -bsf dump_extra -f mp4 pipe:',
         'http://nginx-push-stream/sub/my_channel_1.b20'
     );
     $content = new Stream\Pipe\ReadPipeStream($command);

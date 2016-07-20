@@ -7,7 +7,7 @@ nginx-push-stream:
     - ./push-stream.conf:/etc/nginx/nginx.conf
 
 publisher:
-  image: gallna/php5:ffmpeg
+  image: gallna/php5-fpm:ffmpeg
   expose:
     - 9000
   links:
@@ -20,7 +20,7 @@ publisher:
     DEBUG: 'true'
 
 subscriber:
-  image: gallna/php5:ffmpeg
+  image: gallna/php5-fpm:ffmpeg
   expose:
     - 9000
   links:
