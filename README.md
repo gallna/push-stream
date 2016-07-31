@@ -1,6 +1,6 @@
 # Purpose
 
-Video streaming proxy using [nginx push stream module](https://github.com/wandenberg/nginx-push-stream-module) as stream broker.
+Video streaming proxy using [nginx push stream module](https://www.nginx.com/resources/wiki/modules/push_stream/) as stream broker.
 
 # Usage:
 
